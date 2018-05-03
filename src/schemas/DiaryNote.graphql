@@ -1,0 +1,20 @@
+type DiaryNote {
+  _id: String
+  title: String
+  text: String
+  isPublic: Boolean
+  creatorId: String
+  date: String
+}
+  
+type Query {
+  getDiaryNotes: [DiaryNote!]!
+}
+
+type Mutation {
+  updateDiaryNote(_id: String, title: String, text: String, isPublic: Boolean): DiaryNote!
+
+  deleteDiaryNote(_id: String): DiaryNote!
+
+  createDiaryNote(title: String, text: String, isPublic: Boolean): DiaryNote!
+}

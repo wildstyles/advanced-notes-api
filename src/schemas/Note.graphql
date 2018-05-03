@@ -1,0 +1,19 @@
+type Note {
+  _id: String
+  title: String
+  body: String
+  creatorId: String
+  date: String
+}
+  
+type Query {
+  allNotes: [Note!]!
+}
+
+type Mutation {
+  createNote(title: String, body: String): Note!,
+
+  updateNote(title: String, body: String, _id: String): Note!,
+
+  deleteNote(_id: String): Note!
+}

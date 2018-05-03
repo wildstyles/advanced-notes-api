@@ -1,0 +1,28 @@
+type Word {
+  _id: String
+  title: String
+  body: String
+  _creatorId: String
+  date: String
+}
+  
+type Query {
+  getWords(
+    _id: String
+    title: String
+    body: String
+    _creatorId: String
+    date: String
+  ): [Word!]!
+}
+
+type Mutation {
+  updateWord(
+    title: String
+    body: String
+  ): Word!,
+
+  deleteWord(
+    _id: String
+  ): Word!
+}

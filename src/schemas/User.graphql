@@ -1,0 +1,40 @@
+type User {
+  _id: String
+  email: String
+  username: String
+  about: String
+  firstname: String
+  lastname: String
+  creationDate: String
+}
+  
+type AuthorizationResponse {
+  user: User
+  token: String
+  errors: [Error!]
+}
+
+type Error {
+  name: String!
+  message: String!
+}
+
+type Query {
+  me: User
+}
+
+type changePasswordResponse {
+  isSuccess: Boolean!
+}
+
+type Mutation {
+  updateUser(username: String, about: String, firstname: String, lastname: String): User!,
+
+  register(email: String, password: String, username: String): AuthorizationResponse!
+
+  login(email: String!, password: String!): AuthorizationResponse!
+
+  deleteUser: User!
+
+  changePassword(newPassword: String, oldPassword: String, repeatPassword: String): changePasswordResponse!
+}
