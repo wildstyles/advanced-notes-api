@@ -14,16 +14,16 @@ const emailValidator = [
 const usernameValidator = [
   mongooseValidate({
     validator: 'isLength',
-    arguments: [3, 20],
-    message: '{PATH} should be between {ARGS[0]} and {ARGS[1]} characters!'
+    arguments: [0, 20],
+    message: '{PATH} should be not more {ARGS[1]} characters!'
   })
 ];
 
 const firstnameValidator = [
   mongooseValidate({
     validator: 'isLength',
-    arguments: [3, 20],
-    message: '{PATH} should be between {ARGS[0]} and {ARGS[1]} characters!'
+    arguments: [0, 20],
+    message: '{PATH} should be not more {ARGS[1]} characters!'
   })
 ];
 
@@ -43,7 +43,19 @@ const UserSchema = mongoose.Schema({
     uniqueCaseInsensitive: true,
     required: new AuthorizationError(),
     validate: emailValidator
-	},
+  },
+  avatar: {
+    default: '',
+    type: String
+  },
+  telegram: {
+    type: String,
+    default: ''
+  },
+  vk: {
+    type: String,
+    default: ''
+  },
 	password: {
     type: String,
     trim: true,
@@ -60,16 +72,19 @@ const UserSchema = mongoose.Schema({
   },
   about: {
     type: String,
+    default: '',
     trim: true,
     validate: firstnameValidator
   },
   firstname: {
     type: String,
     trim: true,
+    default: '',
     validate: firstnameValidator
   },
   lastname: {
     type: String,
+    default: '',
     trim: true
   },
   creationDate: {

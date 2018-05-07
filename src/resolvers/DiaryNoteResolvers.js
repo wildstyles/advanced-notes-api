@@ -26,12 +26,30 @@ export default {
       try {
         const creatorId = context.user._id;
 
-        const notes = await DiaryNote.find({ creatorId });
+        const notes = await DiaryNote.find({ creatorId }).populate('creatorId');
         return notes;
       } catch (e) {
         throw new Error(e);
       }
-    })
+    }),
+
+    async getPublicDiary (parent, args, context) {
+      try {
+        const notes = await DiaryNote.find({ isPublic: true }).populate('creatorId');
+        return notes;
+      } catch (e) {
+        throw new Error(e);
+      }
+    },
+
+    async getUserDiary (parent, { creatorId }, context) {
+      try {
+        const notes = await DiaryNote.find({ creatorId, isPublic: true }).populate('creatorId');
+        return notes;
+      } catch (e) {
+        throw new Error(e);
+      }
+    }
   },
   Mutation: {
     createDiaryNote: async (parent, { title, text, isPublic }, context) => {
@@ -42,8 +60,10 @@ export default {
           creatorId: context.user._id,
           isPublic
         }).save();
+        
+        const newNote = await DiaryNote.findOne({ _id: note._id }).populate('creatorId').select('-__v');
 
-        return note;
+        return newNote;
       } catch (e) {
         throw new Error(e);
       }

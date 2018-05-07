@@ -3,9 +3,12 @@ type User {
   email: String
   username: String
   about: String
+  avatar: String
   firstname: String
   lastname: String
   creationDate: String
+  vk: String
+  telegram: String
 }
   
 type AuthorizationResponse {
@@ -20,7 +23,8 @@ type Error {
 }
 
 type Query {
-  me: User
+  me: User,
+  getUserInfo(_id: String): User
 }
 
 type changePasswordResponse {
@@ -28,11 +32,11 @@ type changePasswordResponse {
 }
 
 type Mutation {
-  updateUser(username: String, about: String, firstname: String, lastname: String): User!,
+  updateUser(about: String, firstname: String, lastname: String, avatar: String vk: String telegram: String): User!,
 
   register(email: String, password: String, username: String): AuthorizationResponse!
 
-  login(email: String!, password: String!): AuthorizationResponse!
+  login(username: String!, password: String!): AuthorizationResponse!
 
   deleteUser: User!
 

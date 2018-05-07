@@ -4,6 +4,11 @@ import User from './../models/User';
 import _ from 'lodash';
 import { PasswordError, EmailError, DeleteUserError } from './../errors/errors';
 import { requiresAuth } from './../permissions';
+import firebase from 'firebase-admin';
+import axios from 'axios';
+import FormData from 'form-data';
+import base64 from 'file-base64';
+import fs from 'fs';
 
 const formatErrors = (e) => {
   if (e.name === 'ValidationError') {
@@ -24,35 +29,43 @@ export default {
   Query: {
     me: requiresAuth.createResolver(async (parent, args, context) => {
       try {
-        const { email, _id } = context.user;
-        const user = await User.findOne({ email, _id });
+        const { username, _id } = context.user;
+        const user = await User.findOne({ username, _id });
         return user;
       } catch (e) {
         throw new Error(e);
       }
-    })
+    }),
+    async getUserInfo (parent, { _id }, context) {
+      try {
+        const user = await User.findOne({ _id });
+        return user;
+      } catch (e) {
+        throw new Error(e);
+      }
+    }
   },
   Mutation: {
     register: async (parent, { email, password, username }, context) => {
       try {   
         const user = await new User({ email, password, username }).save();
 
-        const token = jwt.sign({ email, _id: user._id }, process.env.JWT_KEY, { expiresIn: "7d" });
+        const token = jwt.sign({ username, _id: user._id }, process.env.JWT_KEY, { expiresIn: "7d" });
 
         return { user, token };
       } catch (e) {
         return { errors: formatErrors(e) }
       }
     },
-    login: async (parent, { email, password }) => {
+    login: async (parent, { username, password }) => {
       try {
-        const user = await User.findOne({ email });
-        if (!user) throw 'invalid email';
+        const user = await User.findOne({ username });
+        if (!user) throw 'invalid username';
 
         const isPasswordMatches = await bcrypt.compare(password, user.password);
         if (!isPasswordMatches) throw 'invalid password'; 
 
-        const token = jwt.sign({ email, _id: user._id }, process.env.JWT_KEY, { expiresIn: "7d" });
+        const token = jwt.sign({ username, _id: user._id }, process.env.JWT_KEY, { expiresIn: "7d" });
 
         return { user, token };
       } catch (e) {
@@ -82,12 +95,13 @@ export default {
     }),
     updateUser: requiresAuth.createResolver(async (parent, args, context) => {
       try {
-        const { email, _id } = context.user;
+        const { username, _id } = context.user;
 
-        const update = _.pick(args, ['about', 'firstname', 'lastname', 'username']);
+        const update = _.pick(args, ['about', 'firstname', 'lastname', 'avatar', 'vk', 'telegram']);
 
+        
         const user = await User.findOneAndUpdate(
-          { email, _id },
+          { username, _id },
           { $set: update },
           { new: true, runValidators: true, }
         );

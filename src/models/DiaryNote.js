@@ -15,7 +15,8 @@ const DiaryNoteSchema = mongoose.Schema({
   },
   creatorId: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true
+    required: true,
+    ref: 'User'
   },
   date: {
     type: Date,

@@ -1,0 +1,16 @@
+{
+  "test": {
+    "PORT": 3000,
+    "MONGODB_URI": "mongodb://localhost:27017/advancedNotesTest",
+    "JWT_KEY": "secret",
+    "MONGODB_PASSWORD": "drotuk159",
+    "MONGODB_LOGIN": "wildstyles"
+  },
+  "development": {
+    "PORT": 3000,
+    "MONGODB_URI": "mongodb://localhost:27017/advancedNotes",
+    "JWT_KEY": "secret",
+    "MONGODB_PASSWORD": "drotuk159",
+    "MONGODB_LOGIN": "wildstyles"
+  }
+}

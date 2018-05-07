@@ -3,12 +3,16 @@ type DiaryNote {
   title: String
   text: String
   isPublic: Boolean
-  creatorId: String
+  creatorId: User
   date: String
 }
   
 type Query {
   getDiaryNotes: [DiaryNote!]!
+
+  getPublicDiary: [DiaryNote!]!
+
+  getUserDiary(creatorId: String): [DiaryNote!]!
 }
 
 type Mutation {
