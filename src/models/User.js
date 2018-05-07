@@ -73,8 +73,7 @@ const UserSchema = mongoose.Schema({
   about: {
     type: String,
     default: '',
-    trim: true,
-    validate: firstnameValidator
+    trim: true
   },
   firstname: {
     type: String,
